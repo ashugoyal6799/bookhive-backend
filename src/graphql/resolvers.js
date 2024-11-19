@@ -23,10 +23,19 @@ const resolvers = {
     deleteReview: async (_, { id }) => reviewService.deleteReview(id),
   },
   Author: {
-    books: async (parent) => bookService.getBooksByAuthor(parent.id),
+    books: async (parent, _, { bookLoader }) => {
+      //return bookService.getBooksByAuthor(parent.id);
+      return bookLoader.load(parent.id);
+    },
   },
   Book: {
-    author: async (parent) => authorService.getAuthorById(parent.author_id),
+    author: async (parent, _, { authorLoader }) => {
+      // Previously, this would directly fetch the author by ID, causing an N+1 problem:
+      // return authorService.getAuthorById(parent.author_id);
+
+      // Now using DataLoader to batch and cache queries, resolving the N+1 issue:
+      return authorLoader.load(parent.author_id);
+    },
   },
 };
 

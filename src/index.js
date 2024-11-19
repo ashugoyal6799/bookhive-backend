@@ -6,6 +6,8 @@ const traceMiddleware = require("./middlewares/traceMiddleware");
 const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
 const { logger } = require("./utils/logger");
+const authorLoader = require("./graphql/dataloaders/author.loader");
+const bookLoader = require("./graphql/dataloaders/books.loader");
 
 const app = express();
 
@@ -56,7 +58,11 @@ const gracefulShutdown = () => {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: () => ({ sequelize }),
+  context: ({}) => ({
+    sequelize,
+    authorLoader: authorLoader(),
+    bookLoader: bookLoader(),
+  }),
   introspection: NODE_ENV === "development", // Enable introspection in development
   playground: NODE_ENV === "development", // Enable playground in development
 });
