@@ -4,33 +4,32 @@ const typeDefs = gql`
   type Author {
     id: ID!
     name: String!
-    biography: String
-    born_date: String
+    biography: String!
+    born_date: String!
     books: [Book]
   }
 
   type Book {
     id: ID!
     title: String!
-    description: String
-    published_date: String
-    author: Author
+    description: String!
+    published_date: String!
+    author: Author!
   }
 
   type Review {
     id: ID!
     bookId: ID!
     authorId: ID
-    content: String
-    rating: Int
-    createdAt: String
+    content: String!
+    rating: Int!
   }
 
   input ReviewInput {
     bookId: ID!
     authorId: ID
     content: String!
-    rating: Int
+    rating: Int!
   }
 
   type PaginatedBooks {
